@@ -1,5 +1,6 @@
 package id.haonlabs.manhwaclan.ui.home
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -22,6 +23,7 @@ class HomeViewModel
         }
 
         var webtoons by mutableStateOf<List<DataItem>>(emptyList())
+        var isLoading by mutableStateOf(true)
 
 //        private fun loadPopular() {
 //            viewModelScope.launch {
@@ -34,7 +36,14 @@ class HomeViewModel
 
         fun loadLatest(page: Int) {
             viewModelScope.launch {
-                webtoons = repository.fetchLatest(page) as List<DataItem>
+                isLoading = true
+                try {
+                    webtoons = repository.fetchLatest(page) as List<DataItem>
+                } catch (e: Exception) {
+                    Log.e(TAG, "loadLatest: $e")
+                } finally {
+                    isLoading = false
+                }
             }
         }
 
@@ -43,7 +52,14 @@ class HomeViewModel
             page: Int,
         ) {
             viewModelScope.launch {
-                webtoons = repository.fetchByType(type, page) as List<DataItem>
+                isLoading = true
+                try {
+                    webtoons = repository.fetchByType(type, page) as List<DataItem>
+                } catch (e: Exception) {
+                    Log.e(TAG, "loadByType: $e")
+                } finally {
+                    isLoading = false
+                }
             }
         }
     }

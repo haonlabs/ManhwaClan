@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import id.haonlabs.manhwaclan.components.MyTopBar
+import id.haonlabs.manhwaclan.utils.shimmerLoading
 
 @Composable
 fun HomePage(
@@ -57,17 +59,32 @@ fun HomePage(
     Column(modifier = Modifier.fillMaxSize()) {
         MyTopBar()
         ComicTabs(selectedTabIndex) { selectedTabIndex = it }
-
-        LazyColumn {
-            items(viewModel.webtoons) { webtoon ->
-                ComicItem(
-                    title = webtoon.title.toString(),
-                    latestChapter = webtoon.chapter,
-                    rating = webtoon.ratting,
-                    image = webtoon.img.toString(),
-                    navController = navController,
-                    url = webtoon.url.toString(),
-                )
+        if (viewModel.isLoading) {
+            LazyColumn {
+                items(5) {
+                    Box(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(20.dp, 10.dp)
+                                .height(100.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .shimmerLoading(),
+                    )
+                }
+            }
+        } else {
+            LazyColumn {
+                items(viewModel.webtoons) { webtoon ->
+                    ComicItem(
+                        title = webtoon.title.toString(),
+                        latestChapter = webtoon.chapter,
+                        rating = webtoon.ratting,
+                        image = webtoon.img.toString(),
+                        navController = navController,
+                        url = webtoon.url.toString(),
+                    )
+                }
             }
         }
     }
