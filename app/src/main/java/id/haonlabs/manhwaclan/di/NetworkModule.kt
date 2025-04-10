@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import id.haonlabs.manhwaclan.BuildConfig
 import id.haonlabs.manhwaclan.data.remote.WebtoonApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,14 +14,11 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     @Provides
-    fun provideBaseUrl() = "https://laravel-api-manga-scraper.vercel.app/api/api/"
-
-    @Provides
     @Singleton
-    fun provideRetrofit(baseUrl: String): Retrofit =
+    fun provideRetrofit(): Retrofit =
         Retrofit
             .Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

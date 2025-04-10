@@ -10,6 +10,17 @@ interface WebtoonApi {
     @GET("popular")
     suspend fun getPopular(): WebtoonResponse
 
+    @GET("terbaru/{page}")
+    suspend fun getLatest(
+        @Path("page") page: Int,
+    ): WebtoonResponse
+
+    @GET("type/{type}/{page}")
+    suspend fun getByType(
+        @Path("type") type: String,
+        @Path("page") page: Int,
+    ): WebtoonResponse
+
     @GET("detail/{url}")
     suspend fun getDetail(
         @Path("url") url: String,

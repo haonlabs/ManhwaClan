@@ -11,7 +11,14 @@ class WebtoonRepository
     constructor(
         private val api: WebtoonApi,
     ) {
-        suspend fun fetchPopular(): List<DataItem?>? = api.getPopular().data
+//        suspend fun fetchPopular(): List<DataItem?>? = api.getPopular().data
+
+        suspend fun fetchLatest(page: Int): List<DataItem?>? = api.getLatest(page).data?.data
+
+        suspend fun fetchByType(
+            type: String,
+            page: Int,
+        ): List<DataItem?>? = api.getByType(type, page).data?.data
 
         suspend fun fetchDetailWebtoon(url: String): Data? = api.getDetail(url).data
 
